@@ -3,20 +3,109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Malla Curricular</title>
+  <title>Malla Curricular Interactiva</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f3f0ff; color: #333; }
-    .semestre { margin-bottom: 30px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-    .semestre h2 { margin-top: 0; color: #5a3d8f; }
-    label { display: block; margin: 6px 0; cursor: pointer; }
-    label.tachado { text-decoration: line-through; color: #888; }
-    input[type="checkbox"]:disabled + label { color: #ccc; cursor: not-allowed; }
+    :root {
+      --bg: #f3f0ff;
+      --primary: #5a3d8f;
+      --card: #ffffff;
+      --text: #333;
+    }
+
+    body.celeste {
+      --bg: #e8f8ff;
+      --primary: #2c81ba;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      padding: 0;
+      margin: 0;
+    }
+
+    .welcome-screen {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+    }
+
+    .welcome-screen h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .theme-btn {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      background-color: var(--primary);
+      transition: background 0.3s;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .semestre {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .semestre h2 {
+      color: var(--primary);
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin: 8px 0;
+      cursor: pointer;
+    }
+
+    label.tachado {
+      text-decoration: line-through;
+      color: #888;
+    }
+
+    input[type="checkbox"]:disabled + label {
+      color: #bbb;
+      cursor: not-allowed;
+    }
+
+    .reset-btn {
+      margin-top: 40px;
+      padding: 8px 16px;
+      border: none;
+      background: #999;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Malla Curricular Interactiva</h1>
-  <div id="malla-container"></div>
+  <div id="welcome" class="welcome-screen">
+    <h1>¿Qué color quieres para tu malla?</h1>
+    <button class="theme-btn" onclick="elegirTema('morado')">Morado</button>
+    <button class="theme-btn" onclick="elegirTema('celeste')">Celeste</button>
+  </div>
+
+  <div id="malla-container" class="container" style="display: none;"></div>
 
   <script>
     const malla = {
@@ -92,14 +181,35 @@
     };
 
     const container = document.getElementById('malla-container');
+    const welcome = document.getElementById('welcome');
     const storageKey = 'mallaProgreso';
+    const themeKey = 'temaElegido';
+
     let progreso = JSON.parse(localStorage.getItem(storageKey)) || {};
+
+    function elegirTema(color) {
+      document.body.classList.toggle('celeste', color === 'celeste');
+      localStorage.setItem(themeKey, color);
+      welcome.style.display = 'none';
+      container.style.display = 'block';
+      iniciarMalla();
+    }
+
+    function cargarTemaGuardado() {
+      const color = localStorage.getItem(themeKey);
+      if (color) {
+        document.body.classList.toggle('celeste', color === 'celeste');
+        welcome.style.display = 'none';
+        container.style.display = 'block';
+        iniciarMalla();
+      }
+    }
 
     function guardarProgreso() {
       localStorage.setItem(storageKey, JSON.stringify(progreso));
     }
 
-    function crearMalla() {
+    function iniciarMalla() {
       container.innerHTML = '';
       const semestres = Object.keys(malla);
 
@@ -141,6 +251,16 @@
 
         container.appendChild(div);
       });
+
+      // Botón para reiniciar progreso
+      const reset = document.createElement('button');
+      reset.textContent = 'Reiniciar progreso';
+      reset.className = 'reset-btn';
+      reset.onclick = () => {
+        localStorage.removeItem(storageKey);
+        location.reload();
+      };
+      container.appendChild(reset);
     }
 
     function actualizarDesbloqueo() {
@@ -166,15 +286,13 @@
         const desbloqueado = progreso[`desbloqueado-${semestre}`];
         malla[semestre].forEach((_, i) => {
           const checkbox = document.getElementById(`${semestre}-${i}`);
-          if (checkbox) {
-            checkbox.disabled = !desbloqueado;
-          }
+          if (checkbox) checkbox.disabled = !desbloqueado;
         });
       });
     }
 
     actualizarDesbloqueo();
-    crearMalla();
+    cargarTemaGuardado();
   </script>
 
 </body>
