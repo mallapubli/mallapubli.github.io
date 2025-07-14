@@ -44,6 +44,17 @@
       font-weight: 600;
       letter-spacing: 0.5px;
       box-shadow: 0 4px 8px var(--shadow);
+      background: linear-gradient(270deg, #7a42c8, #bb6ce8, #7a42c8);
+      background-size: 600% 600%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientAnimation 8s ease infinite;
+    }
+
+    @keyframes gradientAnimation {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
     }
 
     .screen {
@@ -95,6 +106,7 @@
       width: 280px;
       box-shadow: 0 4px 12px var(--shadow);
       position: relative;
+      transition: box-shadow 0.3s ease;
     }
 
     .semestre::before {
@@ -108,6 +120,13 @@
       border-radius: 12px;
       font-size: 0.9rem;
       box-shadow: 0 3px 6px var(--shadow);
+      user-select: none;
+    }
+
+    .semestre.locked {
+      filter: grayscale(0.8);
+      opacity: 0.6;
+      pointer-events: none;
     }
 
     .ramo {
@@ -118,7 +137,7 @@
       padding: 10px 12px;
       border-radius: 10px;
       font-size: 0.95rem;
-      transition: background 0.3s;
+      transition: background 0.3s ease, color 0.3s ease, text-decoration 0.3s ease, transform 0.2s ease;
     }
 
     .ramo.checked {
@@ -127,9 +146,16 @@
       color: #555;
     }
 
+    .ramo:hover:not(.checked) {
+      box-shadow: 0 4px 10px rgba(122, 66, 200, 0.3);
+      transform: translateY(-2px);
+      cursor: pointer;
+    }
+
     .ramo input {
       margin-right: 10px;
       transform: scale(1.2);
+      cursor: pointer;
     }
 
     .ramo span::before {
@@ -140,11 +166,18 @@
       max-width: 200px;
       margin-top: 20px;
       opacity: 0.7;
+      animation: float 3s ease-in-out infinite;
+      user-select: none;
     }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
     @media (max-width: 768px) {
@@ -171,7 +204,7 @@
     <button class="btn" onclick="elegirTema('celeste')">🌊 Celeste</button>
   </div>
 
-  <div id="pantalla-malla" style="display:none;">
+  <div id="pantalla-malla" class="screen" style="display:none; flex-direction: column; align-items: center;">
     <div id="malla-container" class="container"></div>
     <button class="btn" onclick="reiniciar()">Reiniciar progreso</button>
   </div>
@@ -262,7 +295,7 @@
       document.body.classList.add(color);
       localStorage.setItem(temaKey, color);
       document.getElementById('pantalla-color').classList.remove('active');
-      document.getElementById('pantalla-malla').style.display = 'block';
+      document.getElementById('pantalla-malla').style.display = 'flex';
       iniciarMalla();
     }
 
@@ -271,7 +304,7 @@
       if (color) {
         document.body.classList.add(color);
         document.getElementById('pantalla-bienvenida').style.display = 'none';
-        document.getElementById('pantalla-malla').style.display = 'block';
+        document.getElementById('pantalla-malla').style.display = 'flex';
         iniciarMalla();
       }
     }
@@ -281,12 +314,19 @@
       container.innerHTML = '';
       const semestres = Object.keys(malla);
 
+      // Actualizamos desbloqueo según progreso
+      actualizarDesbloqueo();
+
       semestres.forEach((semestre, index) => {
         const card = document.createElement('div');
         card.className = 'semestre';
-        card.setAttribute('data-title', semestre);
 
-        const desbloqueado = index === 0 || progreso[`desbloqueado-${semestres[index - 1]}`];
+        // Si el semestre está bloqueado, agregar clase locked
+        if (!progreso[`desbloqueado-${semestre}`]) {
+          card.classList.add('locked');
+        }
+        
+        card.setAttribute('data-title', semestre);
 
         malla[semestre].forEach((ramo, i) => {
           const id = `${semestre}-${i}`;
@@ -299,13 +339,16 @@
           const check = document.createElement('input');
           check.type = 'checkbox';
           check.checked = checked;
-          check.disabled = !desbloqueado;
+          // Solo activo si semestre desbloqueado
+          check.disabled = !progreso[`desbloqueado-${semestre}`];
 
           check.addEventListener('change', () => {
             progreso[id] = check.checked;
             label.classList.toggle('checked', check.checked);
             actualizarDesbloqueo();
             guardarProgreso();
+            // Refrescar para actualizar bloqueos visuales
+            iniciarMalla();
           });
 
           const span = document.createElement('span');
@@ -318,22 +361,20 @@
 
         container.appendChild(card);
       });
-
-      actualizarDesbloqueo();
     }
 
     function actualizarDesbloqueo() {
       const semestres = Object.keys(malla);
       semestres.forEach((semestre, index) => {
         if (index === 0) {
-          progreso[`desbloqueado-${semestre}`] = true;
+          progreso[`desbloqueado-${semestre}`] = true; // siempre desbloqueado el primero
           return;
         }
         const anterior = semestres[index - 1];
+        // Comprobar si todos los ramos del semestre anterior están marcados
         const completo = malla[anterior].every((_, i) => progreso[`${anterior}-${i}`]);
         progreso[`desbloqueado-${semestre}`] = completo;
       });
-      guardarProgreso();
     }
 
     function guardarProgreso() {
@@ -345,6 +386,7 @@
       location.reload();
     }
 
+    // Al cargar, intentar cargar tema y progreso
     cargarTemaGuardado();
   </script>
 
