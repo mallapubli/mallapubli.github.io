@@ -3,40 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Malla Curricular</title>
+  <title>Mi Malla Publicitaria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f3f0ff;
-      --primary: #5a3d8f;
-      --card: #fff;
+      --bg-gradient-morado: linear-gradient(135deg, #e8d3ff, #f3e5ff);
+      --bg-gradient-celeste: linear-gradient(135deg, #d4f1ff, #e5fbff);
+      --primary-morado: #7a42c8;
+      --primary-celeste: #2c81ba;
       --text: #333;
-      --ramo: #eadbff;
-      --ramo-checked: #c2b1e9;
-    }
-
-    body.celeste {
-      --bg: #e8f8ff;
-      --primary: #2c81ba;
-      --ramo: #d6f2ff;
-      --ramo-checked: #a3dffc;
+      --card-bg: #ffffff;
+      --shadow: rgba(0,0,0,0.08);
     }
 
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg);
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-gradient);
       color: var(--text);
       transition: background 0.5s ease;
+      overflow-x: hidden;
+    }
+
+    body.morado {
+      --bg-gradient: var(--bg-gradient-morado);
+      --primary: var(--primary-morado);
+    }
+
+    body.celeste {
+      --bg-gradient: var(--bg-gradient-celeste);
+      --primary: var(--primary-celeste);
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 8px var(--shadow);
     }
 
     .screen {
       display: none;
-      height: 100vh;
+      min-height: 100vh;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       text-align: center;
-      padding: 20px;
+      padding: 30px;
       animation: fadeIn 0.6s ease forwards;
     }
 
@@ -44,120 +61,119 @@
       display: flex !important;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .theme-btn, .start-btn, .reset-btn {
-      padding: 12px 20px;
-      margin: 10px;
+    .btn {
+      padding: 14px 24px;
       font-size: 1rem;
       border: none;
-      border-radius: 8px;
-      color: white;
+      border-radius: 10px;
       background-color: var(--primary);
+      color: white;
       cursor: pointer;
-      transition: background 0.3s;
+      margin: 10px;
+      box-shadow: 0 3px 6px var(--shadow);
+      transition: transform 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
     }
 
     .container {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
       justify-content: center;
+      gap: 24px;
       padding: 30px;
-      animation: fadeIn 0.6s ease forwards;
+      max-width: 1200px;
+      margin: auto;
     }
 
     .semestre {
-      background: var(--card);
-      border-radius: 12px;
-      padding: 16px;
-      width: 250px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      width: 280px;
+      box-shadow: 0 4px 12px var(--shadow);
+      position: relative;
     }
 
-    .semestre h2 {
-      text-align: center;
-      color: var(--primary);
-      margin-bottom: 12px;
+    .semestre::before {
+      content: attr(data-title);
+      position: absolute;
+      top: -16px;
+      left: 12px;
+      background: var(--primary);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      box-shadow: 0 3px 6px var(--shadow);
     }
 
     .ramo {
-      background: var(--ramo);
-      margin: 6px 0;
-      padding: 10px 12px;
-      border-radius: 8px;
       display: flex;
       align-items: center;
-      flex-direction: column;
+      background: #f8f8f8;
+      margin: 8px 0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 0.95rem;
       transition: background 0.3s;
     }
 
     .ramo.checked {
-      background: var(--ramo-checked);
+      background: #d9ffd6;
       text-decoration: line-through;
-      color: #666;
+      color: #555;
     }
 
-    .ramo input[type="checkbox"] {
-      margin-right: 8px;
+    .ramo input {
+      margin-right: 10px;
       transform: scale(1.2);
     }
 
-    .nota-input {
-      margin-top: 6px;
-      width: 100%;
-      padding: 4px;
-      font-size: 0.9rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    .ramo span::before {
+      content: '🎓 ';
     }
 
-    .progress-bar {
-      width: 80%;
-      height: 16px;
-      background: #ddd;
-      border-radius: 8px;
-      margin: 20px auto;
-      overflow: hidden;
+    .illustration {
+      max-width: 200px;
+      margin-top: 20px;
+      opacity: 0.7;
     }
 
-    .progress {
-      height: 100%;
-      background: var(--primary);
-      width: 0%;
-      transition: width 0.5s ease;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 768px) {
-      .semestre { width: 90%; }
+      .semestre {
+        width: 90%;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Pantalla 1: Bienvenida -->
+  <header>Mi Malla Publicitaria UFT ✨</header>
+
   <div id="pantalla-bienvenida" class="screen active">
-    <h1>Bienvenid@ a tu Malla Curricular</h1>
-    <button class="start-btn" onclick="mostrarColor()">Comenzar</button>
+    <h1>¡Bienvenid@ a tu camino creativo!</h1>
+    <p>Marca tus ramos, sigue tu avance y personaliza tu experiencia 🎨</p>
+    <button class="btn" onclick="mostrarColor()">Comenzar</button>
+    <img src="https://cdn-icons-png.flaticon.com/512/9068/9068961.png" class="illustration" alt="Ilustración bienvenida">
   </div>
 
-  <!-- Pantalla 2: Elección de color -->
   <div id="pantalla-color" class="screen">
-    <h2>Elige un color para tu malla</h2>
-    <button class="theme-btn" onclick="elegirTema('morado')">🌸 Morado</button>
-    <button class="theme-btn" onclick="elegirTema('celeste')">🌊 Celeste</button>
+    <h2>Elige tu color favorito</h2>
+    <button class="btn" onclick="elegirTema('morado')">🌸 Morado</button>
+    <button class="btn" onclick="elegirTema('celeste')">🌊 Celeste</button>
   </div>
 
-  <!-- Pantalla 3: Malla Curricular -->
   <div id="pantalla-malla" style="display:none;">
-    <div class="progress-bar"><div class="progress" id="barra-progreso"></div></div>
     <div id="malla-container" class="container"></div>
-    <button class="reset-btn" onclick="reiniciar()">Reiniciar progreso</button>
+    <button class="btn" onclick="reiniciar()">Reiniciar progreso</button>
   </div>
 
   <script>
@@ -233,9 +249,9 @@
       ]
     };
 
-    const storageKey = 'mallaProgreso';
-    const themeKey = 'temaElegido';
-    let progreso = JSON.parse(localStorage.getItem(storageKey)) || {};
+    const progresoKey = 'progresoMalla';
+    const temaKey = 'temaElegido';
+    let progreso = JSON.parse(localStorage.getItem(progresoKey)) || {};
 
     function mostrarColor() {
       document.getElementById('pantalla-bienvenida').classList.remove('active');
@@ -243,49 +259,38 @@
     }
 
     function elegirTema(color) {
-      document.body.classList.toggle('celeste', color === 'celeste');
-      localStorage.setItem(themeKey, color);
+      document.body.classList.add(color);
+      localStorage.setItem(temaKey, color);
       document.getElementById('pantalla-color').classList.remove('active');
       document.getElementById('pantalla-malla').style.display = 'block';
       iniciarMalla();
     }
 
     function cargarTemaGuardado() {
-      const color = localStorage.getItem(themeKey);
+      const color = localStorage.getItem(temaKey);
       if (color) {
-        document.body.classList.toggle('celeste', color === 'celeste');
+        document.body.classList.add(color);
         document.getElementById('pantalla-bienvenida').style.display = 'none';
         document.getElementById('pantalla-malla').style.display = 'block';
         iniciarMalla();
       }
     }
 
-    function guardarProgreso() {
-      localStorage.setItem(storageKey, JSON.stringify(progreso));
-    }
-
     function iniciarMalla() {
       const container = document.getElementById('malla-container');
       container.innerHTML = '';
       const semestres = Object.keys(malla);
-      let total = 0, completados = 0;
 
       semestres.forEach((semestre, index) => {
-        const col = document.createElement('div');
-        col.className = 'semestre';
-
-        const title = document.createElement('h2');
-        title.textContent = semestre;
-        col.appendChild(title);
+        const card = document.createElement('div');
+        card.className = 'semestre';
+        card.setAttribute('data-title', semestre);
 
         const desbloqueado = index === 0 || progreso[`desbloqueado-${semestres[index - 1]}`];
 
         malla[semestre].forEach((ramo, i) => {
-          total++;
           const id = `${semestre}-${i}`;
-          const notaId = `${id}-nota`;
           const checked = progreso[id] === true;
-          const notaGuardada = progreso[notaId] || '';
 
           const label = document.createElement('label');
           label.className = 'ramo';
@@ -296,41 +301,25 @@
           check.checked = checked;
           check.disabled = !desbloqueado;
 
-          const texto = document.createElement('span');
-          texto.textContent = ramo;
-
-          const nota = document.createElement('input');
-          nota.type = 'text';
-          nota.className = 'nota-input';
-          nota.placeholder = "Nota";
-          nota.value = notaGuardada;
-          nota.disabled = !desbloqueado;
-
           check.addEventListener('change', () => {
             progreso[id] = check.checked;
             label.classList.toggle('checked', check.checked);
             actualizarDesbloqueo();
             guardarProgreso();
-            actualizarProgreso();
           });
 
-          nota.addEventListener('input', () => {
-            progreso[notaId] = nota.value;
-            guardarProgreso();
-          });
+          const span = document.createElement('span');
+          span.textContent = ramo;
 
-          if (checked) completados++;
           label.appendChild(check);
-          label.appendChild(texto);
-          label.appendChild(nota);
-          col.appendChild(label);
+          label.appendChild(span);
+          card.appendChild(label);
         });
 
-        container.appendChild(col);
+        container.appendChild(card);
       });
 
       actualizarDesbloqueo();
-      actualizarProgreso(total, completados);
     }
 
     function actualizarDesbloqueo() {
@@ -347,17 +336,8 @@
       guardarProgreso();
     }
 
-    function actualizarProgreso(total = 0, completados = 0) {
-      if (!total) {
-        Object.keys(malla).forEach((sem, idx) => {
-          malla[sem].forEach((_, i) => {
-            total++;
-            if (progreso[`${sem}-${i}`]) completados++;
-          });
-        });
-      }
-      const porcentaje = Math.floor((completados / total) * 100);
-      document.getElementById('barra-progreso').style.width = porcentaje + '%';
+    function guardarProgreso() {
+      localStorage.setItem(progresoKey, JSON.stringify(progreso));
     }
 
     function reiniciar() {
