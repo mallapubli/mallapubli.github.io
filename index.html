@@ -1,195 +1,181 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Malla Curricular Interactiva</title>
-<style>
-  body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
-  .semestre { margin-bottom: 25px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 0 8px #ccc; }
-  .semestre h2 { margin-top: 0; }
-  label { display: block; cursor: pointer; }
-  label.tachado { text-decoration: line-through; color: gray; }
-  input[type="checkbox"]:disabled + label { color: #bbb; cursor: not-allowed; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla Curricular</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f3f0ff; color: #333; }
+    .semestre { margin-bottom: 30px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .semestre h2 { margin-top: 0; color: #5a3d8f; }
+    label { display: block; margin: 6px 0; cursor: pointer; }
+    label.tachado { text-decoration: line-through; color: #888; }
+    input[type="checkbox"]:disabled + label { color: #ccc; cursor: not-allowed; }
+  </style>
 </head>
 <body>
 
-<div id="malla-container"></div>
+  <h1>Malla Curricular Interactiva</h1>
+  <div id="malla-container"></div>
 
-<script>
-const malla = {
-  "Semestre 1": [
-    "Habilidades del lenguaje",
-    "Pensamiento visual",
-    "Herramientas Digitales I",
-    "Teorías de la Comunicación",
-    "Cultura y Sociedad",
-    "Taller I",
-    "Introducción al Pensamiento Filosófico"
-  ],
-  "Semestre 2": [
-    "Redacción Creativa",
-    "Imagen Publicitaria",
-    "Herramientas Digitales II",
-    "Arte y Movimientos Culturales",
-    "Taller II",
-    "Identidad Personal"
-  ],
-  "Semestre 3": [
-    "Storytelling",
-    "Semiótica Publicitaria",
-    "Dirección de Arte",
-    "Marketing Estratégico",
-    "Taller III",
-    "Apreciación de los Lenguajes Artísticos",
-    "Inglés I"
-  ],
-  "Semestre 4": [
-    "Guion para Publicidad",
-    "Fotografía",
-    "Comunicación Estratégica y Organizacional",
-    "Branding y Marketing de Experiencias",
-    "Psicología del Consumidor",
-    "Taller IV",
-    "Antropología Filosófica"
-  ],
-  "Semestre 5": [
-    "Lenguaje Audiovisual",
-    "Comunicación y Responsabilidad Social",
-    "Marketing Digital",
-    "Sociología de las Audiencias",
-    "Taller V",
-    "Ética General",
-    "Inglés II"
-  ],
-  "Semestre 6": [
-    "Realización Audiovisual",
-    "Planning",
-    "Métodos Cuantitativos de Investigación",
-    "Taller VI",
-    "Persona y Trascendencia",
-    "Inglés III"
-  ],
-  "Semestre 7": [
-    "Narrativa Transmedia",
-    "Planificación de Medios",
-    "Métodos Cualitativos de Investigación",
-    "Taller VII",
-    "Práctica Campaña Emprendimiento"
-  ],
-  "Semestre 8": [
-    "Laboratorio Transmedia",
-    "Portafolio",
-    "Proyecto de Grado",
-    "Práctica Campaña Social"
-  ],
-  "Semestre 9": [
-    "Proyecto de Título",
-    "Práctica Profesional"
-  ]
-};
+  <script>
+    const malla = {
+      "Semestre 1": [
+        "Habilidades del lenguaje",
+        "Pensamiento visual",
+        "Herramientas Digitales I",
+        "Teorías de la Comunicación",
+        "Cultura y Sociedad",
+        "Taller I",
+        "Introducción al Pensamiento Filosófico"
+      ],
+      "Semestre 2": [
+        "Redacción Creativa",
+        "Imagen Publicitaria",
+        "Herramientas Digitales II",
+        "Arte y Movimientos Culturales",
+        "Taller II",
+        "Identidad Personal"
+      ],
+      "Semestre 3": [
+        "Storytelling",
+        "Semiótica Publicitaria",
+        "Dirección de Arte",
+        "Marketing Estratégico",
+        "Taller III",
+        "Apreciación de los Lenguajes Artísticos",
+        "Inglés I"
+      ],
+      "Semestre 4": [
+        "Guion para Publicidad",
+        "Fotografía",
+        "Comunicación Estratégica y Organizacional",
+        "Branding y Marketing de Experiencias",
+        "Psicología del Consumidor",
+        "Taller IV",
+        "Antropología Filosófica"
+      ],
+      "Semestre 5": [
+        "Lenguaje Audiovisual",
+        "Comunicación y Responsabilidad Social",
+        "Marketing Digital",
+        "Sociología de las Audiencias",
+        "Taller V",
+        "Ética General",
+        "Inglés II"
+      ],
+      "Semestre 6": [
+        "Realización Audiovisual",
+        "Planning",
+        "Métodos Cuantitativos de Investigación",
+        "Taller VI",
+        "Persona y Trascendencia",
+        "Inglés III"
+      ],
+      "Semestre 7": [
+        "Narrativa Transmedia",
+        "Planificación de Medios",
+        "Métodos Cualitativos de Investigación",
+        "Taller VII",
+        "Práctica Campaña Emprendimiento"
+      ],
+      "Semestre 8": [
+        "Laboratorio Transmedia",
+        "Portafolio",
+        "Proyecto de Grado",
+        "Práctica Campaña Social"
+      ],
+      "Semestre 9": [
+        "Proyecto de Título",
+        "Práctica Profesional"
+      ]
+    };
 
-const container = document.getElementById('malla-container');
-const storageKey = 'mallaProgreso';
+    const container = document.getElementById('malla-container');
+    const storageKey = 'mallaProgreso';
+    let progreso = JSON.parse(localStorage.getItem(storageKey)) || {};
 
-// Obtener el progreso guardado o crear uno nuevo vacío
-let progreso = JSON.parse(localStorage.getItem(storageKey)) || {};
-
-// Función para guardar progreso
-function guardarProgreso() {
-  localStorage.setItem(storageKey, JSON.stringify(progreso));
-}
-
-// Crear la UI de la malla
-function crearMalla() {
-  container.innerHTML = '';
-
-  const semestres = Object.keys(malla);
-  
-  semestres.forEach((semestre, index) => {
-    const div = document.createElement('div');
-    div.className = 'semestre';
-    
-    // Título semestre
-    const h2 = document.createElement('h2');
-    h2.textContent = semestre;
-    div.appendChild(h2);
-    
-    // Lista de ramos
-    malla[semestre].forEach((ramo, i) => {
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.id = `${semestre}-${i}`;
-      
-      // Si progreso tiene el ramo marcado, marcar checkbox
-      if (progreso[checkbox.id]) checkbox.checked = true;
-      
-      // Deshabilitar semestre si no es el primero y no está desbloqueado
-      if (index > 0 && !progreso[`desbloqueado-${semestres[index-1]}`]) {
-        checkbox.disabled = true;
-      }
-      
-      // Etiqueta para el checkbox
-      const label = document.createElement('label');
-      label.htmlFor = checkbox.id;
-      label.textContent = ramo;
-      
-      if (checkbox.checked) {
-        label.classList.add('tachado');
-      }
-      
-      // Cambiar estilo al tachar
-      checkbox.addEventListener('change', () => {
-        progreso[checkbox.id] = checkbox.checked;
-        label.classList.toggle('tachado', checkbox.checked);
-        actualizarDesbloqueo();
-        guardarProgreso();
-      });
-      
-      div.appendChild(checkbox);
-      div.appendChild(label);
-    });
-    
-    container.appendChild(div);
-  });
-}
-
-// Función que revisa y actualiza qué semestres están desbloqueados
-function actualizarDesbloqueo() {
-  const semestres = Object.keys(malla);
-
-  semestres.forEach((semestre, index) => {
-    // Si es el primer semestre, siempre desbloqueado
-    if (index === 0) {
-      progreso[`desbloqueado-${semestre}`] = true;
-      return;
+    function guardarProgreso() {
+      localStorage.setItem(storageKey, JSON.stringify(progreso));
     }
-    
-    // Para desbloquear este semestre, todos los checkbox del semestre anterior deben estar marcados
-    const semestreAnterior = semestres[index - 1];
-    const ramosAnteriores = malla[semestreAnterior];
-    
-    const todosMarcados = ramosAnteriores.every((_, i) => progreso[`${semestreAnterior}-${i}`]);
-    
-    progreso[`desbloqueado-${semestre}`] = todosMarcados;
-  });
 
-  // Después de actualizar desbloqueo, actualizar UI para habilitar/deshabilitar checkbox
-  actualizarUI();
-}
+    function crearMalla() {
+      container.innerHTML = '';
+      const semestres = Object.keys(malla);
 
-// Función para actualizar UI segun desbloqueos
-function actualizarUI() {
-  const semestres = Object.keys(malla);
+      semestres.forEach((semestre, index) => {
+        const div = document.createElement('div');
+        div.className = 'semestre';
 
-  semestres.forEach((semestre, index) => {
-    const desbloqueado = progreso[`desbloqueado-${semestre}`];
-    
-    malla[semestre].forEach((_, i) => {
-      const checkbox = document.getElementById(`${semestre}-${i}`);
-      if (!checkbox) return;
-      
-      if (index === 0) {
-        checkbox.disabled = false;
-      } else {
+        const h2 = document.createElement('h2');
+        h2.textContent = semestre;
+        div.appendChild(h2);
+
+        malla[semestre].forEach((ramo, i) => {
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.id = `${semestre}-${i}`;
+          checkbox.style.marginRight = "6px";
+
+          if (progreso[checkbox.id]) checkbox.checked = true;
+          if (index > 0 && !progreso[`desbloqueado-${semestres[index - 1]}`]) {
+            checkbox.disabled = true;
+          }
+
+          const label = document.createElement('label');
+          label.htmlFor = checkbox.id;
+          label.textContent = ramo;
+
+          if (checkbox.checked) label.classList.add('tachado');
+
+          checkbox.addEventListener('change', () => {
+            progreso[checkbox.id] = checkbox.checked;
+            label.classList.toggle('tachado', checkbox.checked);
+            actualizarDesbloqueo();
+            guardarProgreso();
+          });
+
+          div.appendChild(checkbox);
+          div.appendChild(label);
+        });
+
+        container.appendChild(div);
+      });
+    }
+
+    function actualizarDesbloqueo() {
+      const semestres = Object.keys(malla);
+
+      semestres.forEach((semestre, index) => {
+        if (index === 0) {
+          progreso[`desbloqueado-${semestre}`] = true;
+          return;
+        }
+
+        const anterior = semestres[index - 1];
+        const todosMarcados = malla[anterior].every((_, i) => progreso[`${anterior}-${i}`]);
+        progreso[`desbloqueado-${semestre}`] = todosMarcados;
+      });
+
+      actualizarUI();
+    }
+
+    function actualizarUI() {
+      const semestres = Object.keys(malla);
+      semestres.forEach((semestre, index) => {
+        const desbloqueado = progreso[`desbloqueado-${semestre}`];
+        malla[semestre].forEach((_, i) => {
+          const checkbox = document.getElementById(`${semestre}-${i}`);
+          if (checkbox) {
+            checkbox.disabled = !desbloqueado;
+          }
+        });
+      });
+    }
+
+    actualizarDesbloqueo();
+    crearMalla();
+  </script>
+
+</body>
+</html>
